@@ -61,6 +61,12 @@ This requires Fleet to be started with `--dev`, and does **not** work alongside 
 
 To be written when the integration lands. Plan: agents connect a `pkg/mdm/apnsmock` client after MDM enrollment and check in on pings instead of the fixed `-mdm_check_in_interval` timer.
 
-## Terraform and load test (#31314)
+## Load testing with mock APNS server
 
-To be written when the infrastructure lands.
+To spin up a mock APNs server alongside Fleet in a loadtest environment, you need to select `yes` for the "Deploy the mock Apple APNs push server and point Fleet's MDM pushes at it?" option.
+
+This will internally create a container and a sub-url that routes the traffic to it, and configure Fleet containers with `FLEET_DEV_MDM_APPLE_PUSH_SERVER_URL` pointing to it.
+
+osquery-perf loadtesting needs the regular MDM knobs, but also now the `--mdm_apns_url=...` set to the base url. With this it should auto initiate sessions and listen for pings to do MDM check-ins.
+
+
